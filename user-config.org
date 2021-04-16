@@ -64,13 +64,15 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** Alerts
    This sets desktop notifications for orgmode deadlines.
 #+begin_src emacs-lisp :tangle yes
-  (use-package org-alert
-    :ensure t
-    :custom (alert-default-style 'notifications)
+  (use-package org-wild-notifier
+    :after org
     :config
-    (setq org-alert-interval 900
-          org-alert-notification-title "Org Alert Reminder!")
-    (org-alert-enable))
+    ; Make sure we receive notifications for non-TODO events
+    ; like those synced from Google Calendar
+    (setq org-wild-notifier-keyword-whitelist nil)
+    (setq org-wild-notifier-notification-title "Agenda Reminder")
+    (setq org-wild-notifier-alert-time 15)
+    (org-wild-notifier-mode))
 #+end_src
 ** ref
    First we configure where the files can be found.
