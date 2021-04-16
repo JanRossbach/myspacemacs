@@ -72,6 +72,19 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
           org-alert-notification-title "Org Alert Reminder!")
     (org-alert-enable))
 #+end_src
+** ref
+   First we configure where the files can be found.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-ref-default-bibliography '("~/Dropbox/School/Papers/references.bib")
+        org-ref-pdf-directory "~/Dropbox/School/Papers/"
+        org-ref-bibliography-notes "~/Dropbox/School/Papers/notes.org")
+#+end_src
+   This sets the pdf open process to use zathura.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-ref-open-pdf-function
+        (lambda (fpath)
+          (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
+#+end_src
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 

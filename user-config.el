@@ -42,6 +42,14 @@
         org-alert-notification-title "Org Alert Reminder!")
   (org-alert-enable))
 
+(setq org-ref-default-bibliography '("~/Dropbox/School/Papers/references.bib")
+      org-ref-pdf-directory "~/Dropbox/School/Papers/"
+      org-ref-bibliography-notes "~/Dropbox/School/Papers/notes.org")
+
+(setq org-ref-open-pdf-function
+      (lambda (fpath)
+        (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
+
 (setq neo-theme 'icons)
 (setq neo-window-position 'right)
 
