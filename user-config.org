@@ -23,6 +23,13 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
 #+end_src
 
+* Tabs
+ Turn on tab mode by default and set the new tab choice to the home buffer.
+#+begin_src emacs-lisp :tangle yes
+  (tab-bar-mode 1)
+  (setq tab-bar-new-tab-choice "*spacemacs*")
+#+end_src
+
 * Org Mode
 ** Capture
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
