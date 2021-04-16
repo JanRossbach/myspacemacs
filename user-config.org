@@ -1,0 +1,105 @@
+#+TITLE: User Config
+#+AUTHOR: Jan Roßbach
+#+property: header-args:elisp :tangle ~/.spacemacs.d/user-config.el
+
+* Keybinds
+  This section defines some custom Keybinds for sapcemacs.
+
+** Bookmarks
+This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/set-leader-keys "RET" 'bookmark-jump)
+#+end_src
+
+** Python
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/set-leader-keys-for-major-mode 'python-mode "se" 'python-shell-send-statement)
+#+end_src
+
+** Org brain
+   This enables getting to my Org brain files from any org document.
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "v" 'org-brain-visualize)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
+#+end_src
+
+* Org Mode
+** Capture
+   This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
+  #+begin_src emacs-lisp :tangle yes
+    (setq org-capture-templates
+          '(("t" "Todo" entry (file+headline "~/Dropbox/Org/newgtd.org" "Tasks")
+             "* TODO %?\n  %i\n  %a")
+            ("j" "Journal" entry (file+olp+datetree "~/Dropbox/Org/journal.org")
+             "* %?\nEntered on %U\n  %i\n")
+            ("p" "Project" entry (file+headline "~/Dropbox/Org/newgtd.org" "Projects")
+             "** PROJECT %^{Project Name}\n **  %i\n  %a")
+            ("n" "Note" plain (file "~/Dropbox/Org/inbox.org")
+             "* %^{Headline}\n %i")
+            ("a" "Anki")
+            ("ad" "Deep Learning" entry (file+headline "~/Dropbox/Org/anki.org" "Deep Learning")
+             (file "~/Dropbox/Org/templates/ankiTemplate.org"))
+            ("am" "Model Checking" entry (file+headline "~/Dropbox/Org/anki.org" "Model Checking")
+             (file "~/Dropbox/Org/templates/ankiTemplate.org"))
+            ("aa" "Approximative Algorithmen" entry (file+headline "~/Dropbox/Org/anki.org" "Approximative Algorithmen")
+             (file "~/Dropbox/Org/templates/ankiTemplate.org"))))
+  #+end_src
+
+** Babel
+  This defines the languages that babel should load in order to evaluate src blocks.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-confirm-babel-evaluate nil)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '( (java  . t)
+      (python  . t)
+      (shell . t)
+      (clojure . t)
+      (emacs-lisp . t)
+      ))
+
+  (setq org-babel-clojure-backend 'cider)
+#+end_src
+
+** Alerts
+   This sets desktop notifications for orgmode deadlines.
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-alert
+    :ensure t
+    :custom (alert-default-style 'notifications)
+    :config
+    (setq org-alert-interval 900
+          org-alert-notification-title "Org Alert Reminder!")
+    (org-alert-enable))
+#+end_src
+* Misc
+  In this section, there are various little adjustments to same packages that do not warrent a specific section.
+
+** Neotree
+
+#+begin_src emacs-lisp :tangle yes
+  (setq neo-theme 'icons)
+  (setq neo-window-position 'right)
+#+end_src
+
+** Ledger
+#+begin_src emacs-lisp :tangle yes
+  (use-package ledger-mode
+    :mode ("\\.dat\\'"
+           "\\.ledger\\'")
+    :custom (ledger-clear-whole-transactions t))
+  (use-package flycheck-ledger :after ledger-mode)
+#+end_src
+
+** Openwith
+   The openwith package provides support for what file types should be opended with which programs.
+   I am mostly happy with the defaults, but I want to view pdfs with zathura.
+#+begin_src emacs-lisp :tangle yes
+  (openwith-mode t)
+  (setq openwith-associations '(("\\.pdf\\'" "zathura" (file))))
+#+end_src
+** Emacs comp-native
+   This setting disables the constant compiler warnings in the emacs-native-comp version of emacs.
+#+begin_src emacs-lisp :tangle yes
+  (setq comp-async-report-warnings-errors nil)
+#+end_src
