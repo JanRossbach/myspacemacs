@@ -1,6 +1,7 @@
 #+TITLE: User Config
 #+AUTHOR: Jan Roßbach
 #+property: header-args:elisp :tangle ~/.spacemacs.d/user-config.el
+#+STARTUP: overview
 
 * Keybinds
   This section defines some custom Keybinds for sapcemacs.
@@ -35,20 +36,20 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
   #+begin_src emacs-lisp :tangle yes
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/Dropbox/Org/newgtd.org" "Tasks")
+          '(("t" "Todo" entry (file+headline "~/Dropbox/Org/brain/agenda.org" "Tasks")
              "* TODO %?\n  %i\n  %a")
-            ("j" "Journal" entry (file+olp+datetree "~/Dropbox/Org/journal.org")
+            ("j" "Journal" entry (file+olp+datetree "~/Dropbox/Org/brain/journal.org")
              "* %?\nEntered on %U\n  %i\n")
-            ("p" "Project" entry (file+headline "~/Dropbox/Org/newgtd.org" "Projects")
+            ("p" "Project" entry (file+headline "~/Dropbox/Org/brain/agenda.org" "Projects")
              "** PROJECT %^{Project Name}\n **  %i\n  %a")
-            ("n" "Note" plain (file "~/Dropbox/Org/inbox.org")
+            ("n" "Note" plain (file "~/Dropbox/Org/brain/inbox.org")
              "* %^{Headline}\n %i")
             ("a" "Anki")
-            ("ad" "Deep Learning" entry (file+headline "~/Dropbox/Org/anki.org" "Deep Learning")
+            ("ad" "Deep Learning" entry (file+headline "~/Dropbox/Org/brain/anki.org" "Deep Learning")
              (file "~/Dropbox/Org/templates/ankiTemplate.org"))
-            ("am" "Model Checking" entry (file+headline "~/Dropbox/Org/anki.org" "Model Checking")
+            ("am" "Model Checking" entry (file+headline "~/Dropbox/Org/brain/anki.org" "Model Checking")
              (file "~/Dropbox/Org/templates/ankiTemplate.org"))
-            ("aa" "Approximative Algorithmen" entry (file+headline "~/Dropbox/Org/anki.org" "Approximative Algorithmen")
+            ("aa" "Approximative Algorithmen" entry (file+headline "~/Dropbox/Org/brain/anki.org" "Approximative Algorithmen")
              (file "~/Dropbox/Org/templates/ankiTemplate.org"))))
   #+end_src
 
@@ -125,4 +126,9 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
    This setting disables the constant compiler warnings in the emacs-native-comp version of emacs.
 #+begin_src emacs-lisp :tangle yes
   (setq comp-async-report-warnings-errors nil)
+#+end_src
+** Transparency
+   Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/enable-transparency)
 #+end_src
