@@ -148,5 +148,4 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys "wpt" 'popper-toggle-type)
   (spacemacs/set-leader-keys "wpc" 'popper-cycle)
   (spacemacs/set-leader-keys "wpl" 'popper-toggle-latest)
-  (popper-mode +1)
 #+end_src
