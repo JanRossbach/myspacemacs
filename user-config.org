@@ -27,7 +27,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 * Tabs
  Turn on tab mode by default and set the new tab choice to the home buffer.
 #+begin_src emacs-lisp :tangle yes
-  (tab-bar-mode 1)
+  ;; (tab-bar-mode 1)
   (setq tab-bar-new-tab-choice "*spacemacs*")
 #+end_src
 
@@ -62,6 +62,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
    '( (java  . t)
       (python  . t)
       (shell . t)
+      (gnuplot . t)
       (clojure . t)
       (emacs-lisp . t)
       ))
@@ -130,7 +131,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** Transparency
    Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
 #+begin_src emacs-lisp :tangle yes
-  (spacemacs/enable-transparency)
+  ;; (spacemacs/enable-transparency)
 #+end_src
 ** Popper
 
