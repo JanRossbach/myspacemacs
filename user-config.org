@@ -17,13 +17,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'python-mode "se" 'python-shell-send-statement)
 #+end_src
 
-** Org brain
-   This enables getting to my Org brain files from any org document.
-#+begin_src emacs-lisp :tangle yes
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "v" 'org-brain-visualize)
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
-#+end_src
-
 * Tabs
  Turn on tab mode by default and set the new tab choice to the home buffer.
 #+begin_src emacs-lisp :tangle yes
@@ -97,6 +90,43 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
         (lambda (fpath)
           (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
 #+end_src
+
+** Org brain
+   This enables getting to my Org brain files from any org document.
+#+begin_src emacs-lisp :tangle yes
+  (use-package org-brain
+    :ensure t
+    :config
+    (evilified-state-evilify-map org-brain-visualize-mode-map
+      :mode org-brain-visualize-mode
+      :bindings
+      "i" 'org-brain-goto-current
+      "o" 'link-hint-open-link))
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "v" 'org-brain-visualize)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
+#+end_src
+
+* Auto Complete
+** Company
+
+#+begin_src emacs-lisp :tangle yes
+  (setq-default dotspacemacs-configuration-layers
+    '((auto-completion :variables
+                      auto-completion-enable-help-tooltip t)))
+  (setq-default dotspacemacs-configuration-layers
+                '((auto-completion :variables
+                                   auto-completion-enable-snippets-in-popup t)))
+
+  (setq-default dotspacemacs-configuration-layers '(
+    (auto-completion :variables
+                     auto-completion-return-key-behavior 'complete
+                     auto-completion-tab-key-behavior 'cycle
+                     auto-completion-complete-with-key-sequence nil
+                     auto-completion-complete-with-key-sequence-delay 0.1
+                     auto-completion-private-snippets-directory nil)
+                     ))
+#+end_src
+
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 
@@ -126,7 +156,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** Emacs comp-native
    This setting disables the constant compiler warnings in the emacs-native-comp version of emacs.
 #+begin_src emacs-lisp :tangle yes
-  (setq comp-async-report-warnings-errors nil)
+  ;;(setq comp-async-report-warnings-errors nil)
 #+end_src
 ** Transparency
    Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
