@@ -104,6 +104,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
       "o" 'link-hint-open-link))
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "v" 'org-brain-visualize)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
+  (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
 #+end_src
 
 * Auto Complete
