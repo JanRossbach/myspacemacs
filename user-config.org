@@ -127,7 +127,11 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
                      auto-completion-private-snippets-directory nil)
                      ))
 #+end_src
-
+* Spell Check
+ #+begin_src emacs-lisp
+  (setq-default dotspacemacs-configuration-layers
+    '((spell-checking :variables spell-checking-enable-auto-dictionary t)))
+ #+end_src
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 
