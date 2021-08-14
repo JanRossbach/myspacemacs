@@ -1,6 +1,6 @@
 #+TITLE: User Config
 #+AUTHOR: Jan Roßbach
-#+property: header-args:elisp :tangle ~/.spacemacs.d/user-config.el
+#+property: header-args:elisp :tangle ~/.config/spacemacsconf/user-config.el
 #+STARTUP: overview
 
 * Keybinds
@@ -17,6 +17,14 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'python-mode "se" 'python-shell-send-statement)
 #+end_src
 
+** Org Brain alternative keys
+  #+begin_src emacs-lisp :tangle yes
+    (spacemacs/set-leader-keys "oo" 'org-brain-agenda)
+    (spacemacs/set-leader-keys "oA" 'org-brain-archive)
+    (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
+    (spacemacs/set-leader-keys "or" 'org-brain-refile)
+  #+end_src
+
 * Tabs
  Turn on tab mode by default and set the new tab choice to the home buffer.
 #+begin_src emacs-lisp :tangle yes
@@ -29,14 +37,14 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
   #+begin_src emacs-lisp :tangle yes
     (setq org-capture-templates
-          '(("t" "Todo" entry (file+headline "~/Dropbox/Org/brain/agenda.org" "Tasks")
-             "* TODO %?\n  %i\n  %a")
+          '(("t" "Todo" entry (file+headline "~/Dropbox/Org/brain/agenda.org" "Tasklist")
+             "** TODO %?\n  %i\n")
             ("j" "Journal" entry (file+olp+datetree "~/Dropbox/Org/brain/journal.org")
              "* %?\nEntered on %U\n  %i\n")
             ("p" "Project" entry (file+headline "~/Dropbox/Org/brain/agenda.org" "Projects")
-             "** PROJECT %^{Project Name}\n **  %i\n  %a")
-            ("n" "Note" plain (file "~/Dropbox/Org/brain/inbox.org")
-             "* %^{Headline}\n %i")
+             "** %?\n %i\n")
+            ("n" "Note" entry (file "~/Dropbox/Org/brain/inbox.org")
+             "* %i")
             ("a" "Anki")
             ("ad" "Deep Learning" entry (file+headline "~/Dropbox/Org/brain/anki.org" "Deep Learning")
              (file "~/Dropbox/Org/templates/ankiTemplate.org"))
@@ -61,20 +69,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
       ))
 
   (setq org-babel-clojure-backend 'cider)
-#+end_src
-
-** Alerts
-   This sets desktop notifications for orgmode deadlines.
-#+begin_src emacs-lisp :tangle yes
-  ;; (use-package org-wild-notifier
-  ;;   :after org
-  ;;   :config
-  ;;   ; Make sure we receive notifications for non-TODO events
-  ;;   ; like those synced from Google Calendar
-  ;;   (setq org-wild-notifier-keyword-whitelist nil)
-  ;;   (setq org-wild-notifier-notification-title "Agenda Reminder")
-  ;;   (setq org-wild-notifier-alert-time 15)
-  ;;   (org-wild-notifier-mode))
 #+end_src
 
 ** ref
@@ -106,6 +100,103 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
   (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
 #+end_src
+
+** Agenda
+*** TODO-SEQ
+   Setting the keyword Sequenze for todo keywords.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-todo-keywords
+        '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
+#+end_src
+*** Archive
+    Set the archive Location globally to the current archive.
+   #+begin_src emacs-lisp :tangle yes
+     (setq org-archive-location "~/Dropbox/archive/myarchive.org")
+   #+end_src
+*** Inbox
+    Lets first define a custom function to get to the inbox quickly from anywhere and bind it to
+    a spacemacs user command.
+   #+begin_src emacs-lisp :tangle yes
+     (setq gtd/inbox-file-path "~/Dropbox/Org/brain/inbox.org")
+
+     (defun go-to-inbox-buffer ()
+       (interactive)
+       (find-file gtd/inbox-file-path))
+
+     (spacemacs/set-leader-keys "oi" 'go-to-inbox-buffer)
+   #+end_src
+*** Super agenda
+
+    Here I set my GTD view with the help of the org-super-agenda package.
+
+   #+begin_src emacs-lisp :tangle yes
+     (setq spacemacs-theme-org-agenda-height nil
+           org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
+           org-agenda-skip-scheduled-if-done t
+           org-agenda-skip-deadline-if-done t
+           org-agenda-include-deadlines t
+           org-agenda-include-diary t
+           org-agenda-block-separator nil
+           org-agenda-compact-blocks t
+           org-agenda-start-with-log-mode t)
+
+     (setq org-agenda-custom-commands
+           '(("o" "GTD View"
+              ((agenda "" ((org-agenda-span 'day)
+                           (org-super-agenda-groups
+                            '((:name "Today"
+                                     :time-grid t
+                                     :date today
+                                     :todo "TODAY"
+                                     :scheduled today
+                                     :order 1)))))
+               (alltodo "" ((org-agenda-overriding-header "")
+                            (org-super-agenda-groups
+                             '((:name "Next to do"
+                                      :todo "NEXT"
+                                      :order 1)
+                               (:name "Important"
+                                      :tag "Important"
+                                      :priority "A"
+                                      :order 6)
+                               (:name "Due Today"
+                                      :deadline today
+                                      :order 2)
+                               (:name "Due Soon"
+                                      :deadline future
+                                      :order 8)
+                               (:name "Overdue"
+                                      :deadline past
+                                      :order 7)
+                               (:name "Assignments"
+                                      :tag "Assignment"
+                                      :order 10)
+                               (:name "Issues"
+                                      :tag "Issue"
+                                      :order 12)
+                               (:name "Projects"
+                                      :tag "Project"
+                                      :order 14)
+                               (:name "Emacs"
+                                      :tag "Emacs"
+                                      :order 13)
+                               (:name "Research"
+                                      :tag "Research"
+                                      :order 15)
+                               (:name "To read"
+                                      :tag "Read"
+                                      :order 30)
+                               (:name "Waiting"
+                                      :todo "WAITING"
+                                      :order 20)
+                               (:name "trivial"
+                                      :priority<= "C"
+                                      :tag ("Trivial" "Unimportant")
+                                      :todo ("SOMEDAY" )
+                                      :order 90)
+                               (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+   #+end_src
+
 
 * Auto Complete
 ** Company
@@ -169,32 +260,31 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   ;; (spacemacs/enable-transparency)
 #+end_src
 ** Popper
-
 #+begin_src emacs-lisp :tangle yes
-  (setq popper-reference-buffers
-       '("\\*Messages\\*"
-         "\\*Warnings\\*"
-          "Output\\*"
-          help-mode
-          messeges-mode
-          compilation-mode))
-  ;(setq popper-group-function #'popper-group-by-projectile)
-  (global-set-key (kbd "C-ß") 'popper-toggle-latest)
-  (global-set-key (kbd "M-ß") 'popper-cycle)
-  (spacemacs/set-leader-keys "wpt" 'popper-toggle-type)
-  (spacemacs/set-leader-keys "wpc" 'popper-cycle)
-  (spacemacs/set-leader-keys "wpl" 'popper-toggle-latest)
+  ;; (setq popper-reference-buffers
+  ;;      '("\\*Messages\\*"
+  ;;        "\\*Warnings\\*"
+  ;;         "Output\\*"
+  ;;         help-mode
+  ;;         messeges-mode
+  ;;         compilation-mode))
+  ;; ;(setq popper-group-function #'popper-group-by-projectile)
+  ;; (global-set-key (kbd "C-ß") 'popper-toggle-latest)
+  ;; (global-set-key (kbd "M-ß") 'popper-cycle)
+  ;; (spacemacs/set-leader-keys "wpt" 'popper-toggle-type)
+  ;; (spacemacs/set-leader-keys "wpc" 'popper-cycle)
+  ;; (spacemacs/set-leader-keys "wpl" 'popper-toggle-latest)
 #+end_src
 ** Doom Modeline
   #+begin_src emacs-lisp :tangle yes
-(use-package doom-modeline
-:ensure t
-:init (doom-modeline-mode 1)
-:config
-;; Enable flashing mode-line on errors
-(doom-themes-visual-bell-config)
+    (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1)
+    :config
+    ;; Enable flashing mode-line on errors
+    (doom-themes-visual-bell-config)
 
-;; Corrects (and improves) org-mode's native fontification.
-(doom-themes-org-config)
-)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)
+    )
   #+end_src
