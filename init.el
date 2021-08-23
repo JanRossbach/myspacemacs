@@ -81,17 +81,15 @@ values."
    dotspacemacs-additional-packages '(doom-themes
                                       elpher
                                       yasnippet-snippets
-                                      org-tree-slide
-                                      org-brain
                                       anki-editor
                                       openwith
                                       org-super-agenda
                                       org-download
                                       nord-theme
-                                      all-the-icons
-                                      (evil-magit :location (recipe
-                                                             :fetcher github
-                                                             :repo "emacs-evil/evil-magit")))
+                                      all-the-icons)
+                                      ;; (evil-magit :location (recipe
+                                      ;;                        :fetcher github
+                                      ;;                        :repo "emacs-evil/evil-magit")))
    ;; A list of packages that cannot be updated.
    dotspacemacs-frozen-packages '()
    ;; A list of packages that will not be installed and loaded.
@@ -284,6 +282,14 @@ values."
    dotspacemacs-show-transient-state-color-guide t
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
    dotspacemacs-mode-line-unicode-symbols t
+   ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
+   ;; `all-the-icons', `custom', `doom', `vim-powerline' and `vanilla'. The
+   ;; first three are spaceline themes. `doom' is the doom-emacs mode-line.
+   ;; `vanilla' is default Emacs mode-line. `custom' is a user defined themes,
+   ;; refer to the DOCUMENTATION.org for more info on how to create your own
+   ;; spaceline theme. Value can be a symbol or list with additional properties.
+   ;; (default '(spacemacs :separator wave :separator-scale 1.5))
+   dotspacemacs-mode-line-theme '(doom :separator-scale 1.5)
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
@@ -425,6 +431,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(alert-default-style 'notifications)
  '(ansi-color-faces-vector
    [default bold shadow italic underline bold bold-italic bold])
  '(ansi-color-names-vector

@@ -46,6 +46,10 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
             ("aa" "Approximative Algorithmen" entry (file+headline "~/Dropbox/Org/brain/anki.org" "Approximative Algorithmen")
              (file "~/Dropbox/Org/templates/ankiTemplate.org"))))
   #+end_src
+** Notifications
+  #+begin_src emacs-lisp :tangle yes
+    (setq org-wild-notifier--day-wide-events t)
+  #+end_src
 
 ** Babel
   This defines the languages that babel should load in order to evaluate src blocks.
@@ -273,14 +277,5 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 #+end_src
 ** Doom Modeline
   #+begin_src emacs-lisp :tangle yes
-    ;; (use-package doom-modeline
-    ;; :ensure t
-    ;; :init (doom-modeline-mode 1)
-    ;; :config
-    ;; ;; Enable flashing mode-line on errors
-    ;; (doom-themes-visual-bell-config)
-
-    ;; ;; Corrects (and improves) org-mode's native fontification.
-    ;; (doom-themes-org-config)
-    ;; )
+   (doom-modeline-mode 1)
   #+end_src
