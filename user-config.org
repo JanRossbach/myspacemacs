@@ -25,13 +25,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
     (spacemacs/set-leader-keys "or" 'org-brain-refile)
   #+end_src
 
-* Tabs
- Turn on tab mode by default and set the new tab choice to the home buffer.
-#+begin_src emacs-lisp :tangle yes
-  ;; (tab-bar-mode 1)
-  (setq tab-bar-new-tab-choice "*spacemacs*")
-#+end_src
-
 * Org Mode
 ** Capture
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
@@ -88,16 +81,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** Org brain
    This enables getting to my Org brain files from any org document.
 #+begin_src emacs-lisp :tangle yes
-  (use-package org-brain
-    :ensure t
-    :config
-    (evilified-state-evilify-map org-brain-visualize-mode-map
-      :mode org-brain-visualize-mode
-      :bindings
-      "i" 'org-brain-goto-current
-      "o" 'link-hint-open-link))
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "v" 'org-brain-visualize)
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode "g" 'org-brain-goto)
   (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
 #+end_src
 
@@ -131,7 +114,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 
    #+begin_src emacs-lisp :tangle yes
      (setq spacemacs-theme-org-agenda-height nil
-           org-agenda-time-grid '((daily today require-timed) "----------------------" nil)
+           org-agenda-time-grid '((daily today require-timed) (800 1000 1200 1400 1600 1900 2000) "......." "----------------------")
            org-agenda-skip-scheduled-if-done t
            org-agenda-skip-deadline-if-done t
            org-agenda-include-deadlines t
@@ -155,6 +138,9 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
                              '((:name "Next to do"
                                       :todo "NEXT"
                                       :order 1)
+                               (:name "Done"
+                                      :todo "DONE"
+                                      :order 3)
                                (:name "Important"
                                       :tag "Important"
                                       :priority "A"
@@ -195,8 +181,20 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
                                       :todo ("SOMEDAY" )
                                       :order 90)
                                (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+   (org-super-agenda-mode 1)
    #+end_src
 
+** Projects
+   Projectile has some functionality to capture todos for the current project in an Org file. It is stored by default in a file called TODOS.org in the project root.
+   This Code here is to add these files to the Org Agenda.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (with-eval-after-load 'org-agenda
+    (require 'org-projectile)
+    (mapcar '(lambda (file)
+                   (when (file-exists-p file)
+                     (push file org-agenda-files)))
+            (org-projectile-todo-files)))
+#+END_SRC
 
 * Auto Complete
 ** Company
@@ -226,20 +224,18 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 
+** Tabs
+  Turn on tab mode by default and set the new tab choice to the home buffer.
+ #+begin_src emacs-lisp :tangle yes
+   ;; (tab-bar-mode 1)
+   ;; (setq tab-bar-new-tab-choice "*spacemacs*")
+ #+end_src
+
 ** Neotree
 
 #+begin_src emacs-lisp :tangle yes
   (setq neo-theme 'icons)
   (setq neo-window-position 'right)
-#+end_src
-
-** Ledger
-#+begin_src emacs-lisp :tangle yes
-  (use-package ledger-mode
-    :mode ("\\.dat\\'"
-           "\\.ledger\\'")
-    :custom (ledger-clear-whole-transactions t))
-  (use-package flycheck-ledger :after ledger-mode)
 #+end_src
 
 ** Openwith
@@ -277,14 +273,14 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 #+end_src
 ** Doom Modeline
   #+begin_src emacs-lisp :tangle yes
-    (use-package doom-modeline
-    :ensure t
-    :init (doom-modeline-mode 1)
-    :config
-    ;; Enable flashing mode-line on errors
-    (doom-themes-visual-bell-config)
+    ;; (use-package doom-modeline
+    ;; :ensure t
+    ;; :init (doom-modeline-mode 1)
+    ;; :config
+    ;; ;; Enable flashing mode-line on errors
+    ;; (doom-themes-visual-bell-config)
 
-    ;; Corrects (and improves) org-mode's native fontification.
-    (doom-themes-org-config)
-    )
+    ;; ;; Corrects (and improves) org-mode's native fontification.
+    ;; (doom-themes-org-config)
+    ;; )
   #+end_src
