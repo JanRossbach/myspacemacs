@@ -10,6 +10,12 @@
 This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 #+begin_src emacs-lisp :tangle yes
   (spacemacs/set-leader-keys "RET" 'bookmark-jump)
+  (spacemacs/set-leader-keys "ob" 'spacemacs/bm-transient-state/body)
+  (spacemacs/set-leader-keys "om" 'bm-toggle)
+  (spacemacs/set-leader-keys "om" 'bm-toggle)
+  (spacemacs/set-leader-keys "on" 'bm-next)
+  (spacemacs/set-leader-keys "op" 'bm-previous)
+  (spacemacs/set-leader-keys "oc" 'bm-remove-all-all-buffers)
 #+end_src
 
 ** Python
@@ -95,6 +101,10 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
 #+end_src
+*** Agenda files
+   #+begin_src emacs-lisp :tangle yes
+   (setq org-agenda-files '("~/Dropbox/Org/brain"))
+   #+end_src
 *** Archive
     Set the archive Location globally to the current archive.
    #+begin_src emacs-lisp :tangle yes

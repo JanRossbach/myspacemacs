@@ -31,24 +31,22 @@ values."
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
    '(
-     ;;javascript
-     ;;haskell
      asciidoc
      sql
      bibtex
+     markdown
      lsp
      (clojure :variables
               clojure-enable-linters 'clj-kondo)
      csv
-     ;;yaml
      search-engine
      vinegar
      ess
-     markdown
      helm
      auto-completion
-     better-defaults
      emacs-lisp
+     bm
+     dap
      ipython-notebook
      finance
      git
@@ -59,7 +57,6 @@ values."
      sql
      github
      (c-c++ variables: c-c++-enable-clang-support t)
-     ;;themes-megapack
      (org :variables
           org-projectile-file "TODOs.org"
           org-enable-reveal-js-support t
@@ -444,8 +441,10 @@ This function is called at the very end of Spacemacs initialization."
  '(hl-sexp-background-color "#1c1f26")
  '(nrepl-message-colors
    '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
- '(org-agenda-files '("~/Dropbox/Org/brain/"))
+ '(org-agenda-files
+   '("~/Dropbox/Org/brain/inbox.org" "~/Dropbox/Org/brain/journal.org" "~/Dropbox/Org/brain/agenda.org"))
  '(org-brain-path "/home/jan/Dropbox/Org/brain")
+ '(org-export-backends '(ascii html icalendar latex md odt))
  '(org-global-properties nil)
  '(org-modules
    '(org-bbdb org-bibtex org-docview org-eww org-gnus org-habit org-info org-irc org-mhe org-rmail org-w3m))
