@@ -25,11 +25,15 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 
 ** Org Brain alternative keys
   #+begin_src emacs-lisp :tangle yes
+    (define-key org-brain-visualize-mode-map "i" 'link-hint-open-link)
     (spacemacs/set-leader-keys "oo" 'org-brain-agenda)
     (spacemacs/set-leader-keys "oA" 'org-brain-archive)
     (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
     (spacemacs/set-leader-keys "or" 'org-brain-refile)
   #+end_src
+
+  #+RESULTS:
+
 
 * Org Mode
 ** Capture
@@ -105,10 +109,11 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
    #+begin_src emacs-lisp :tangle yes
    (setq org-agenda-files '("~/Dropbox/Org/brain"))
    #+end_src
+
 *** Archive
     Set the archive Location globally to the current archive.
    #+begin_src emacs-lisp :tangle yes
-     (setq org-archive-location "~/Dropbox/archive/myarchive.org")
+     ;;(setq org-archive-location "~/Dropbox/archive/myarchive.org")
    #+end_src
 *** Inbox
     Lets first define a custom function to get to the inbox quickly from anywhere and bind it to
