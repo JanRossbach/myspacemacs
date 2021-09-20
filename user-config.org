@@ -25,7 +25,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 
 ** Org Brain alternative keys
   #+begin_src emacs-lisp :tangle yes
-    (define-key org-brain-visualize-mode-map "i" 'link-hint-open-link)
+    (with-eval-after-load 'org-brain (define-key org-brain-visualize-mode-map "i" 'link-hint-open-link))
     (spacemacs/set-leader-keys "oo" 'org-brain-agenda)
     (spacemacs/set-leader-keys "oA" 'org-brain-archive)
     (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
@@ -33,7 +33,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   #+end_src
 
   #+RESULTS:
-
 
 * Org Mode
 ** Capture
@@ -58,7 +57,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   #+end_src
 ** Notifications
   #+begin_src emacs-lisp :tangle yes
-    (setq org-wild-notifier--day-wide-events t)
+;;    (setq org-wild-notifier--day-wide-events t)
   #+end_src
 
 ** Babel
@@ -81,15 +80,30 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** ref
    First we configure where the files can be found.
 #+begin_src emacs-lisp :tangle yes
-  (setq org-ref-default-bibliography '("~/Dropbox/School/Papers/references.bib")
-        org-ref-pdf-directory "~/Dropbox/School/Papers/"
-        org-ref-bibliography-notes "~/Dropbox/School/Papers/notes.org")
+  (setq org-ref-default-bibliography '("~/Dropbox/Org/brain/Bachelorarbeit/Papers/refs.bib")
+        org-ref-pdf-directory "~/Dropbox/Org/brain/Bachelorarbeit/Papers/"
+        org-ref-bibliography-notes "~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org")
 #+end_src
-   This sets the pdf open process to use zathura.
+
+#+RESULTS:
+: ~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org
+
+This sets the pdf open process to use zathura.
 #+begin_src emacs-lisp :tangle yes
   (setq org-ref-open-pdf-function
         (lambda (fpath)
           (start-process "zathura" "*helm-bibtex-zathura*" "/usr/bin/zathura" fpath)))
+#+end_src
+
+In Order to make sure that bibtex is called on our latex file when compiling it to pdf, we add the bibtex command into the list
+of pdflatex commands that are run on the file. Otherwise citations are not going to work properly.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq org-latex-pdf-process
+        '("pdflatex -interaction nonstopmode -output-directory %o %f"
+          "bibtex %b"
+          "pdflatex -interaction nonstopmode -output-directory %o %f"
+          "pdflatex -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 
 ** Org brain
@@ -105,11 +119,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
 #+end_src
-*** Agenda files
-   #+begin_src emacs-lisp :tangle yes
-   (setq org-agenda-files '("~/Dropbox/Org/brain"))
-   #+end_src
-
 *** Archive
     Set the archive Location globally to the current archive.
    #+begin_src emacs-lisp :tangle yes
