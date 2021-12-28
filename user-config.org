@@ -9,13 +9,13 @@
 ** Bookmarks
 This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 #+begin_src emacs-lisp :tangle yes
-  (spacemacs/set-leader-keys "RET" 'bookmark-jump)
-  (spacemacs/set-leader-keys "ob" 'spacemacs/bm-transient-state/body)
-  (spacemacs/set-leader-keys "om" 'bm-toggle)
-  (spacemacs/set-leader-keys "om" 'bm-toggle)
-  (spacemacs/set-leader-keys "on" 'bm-next)
-  (spacemacs/set-leader-keys "op" 'bm-previous)
-  (spacemacs/set-leader-keys "oc" 'bm-remove-all-all-buffers)
+(spacemacs/set-leader-keys "RET" 'bookmark-jump)
+(spacemacs/set-leader-keys "ob" 'spacemacs/bm-transient-state/body)
+(spacemacs/set-leader-keys "om" 'bm-toggle)
+(spacemacs/set-leader-keys "om" 'bm-toggle)
+(spacemacs/set-leader-keys "on" 'bm-next)
+(spacemacs/set-leader-keys "op" 'bm-previous)
+(spacemacs/set-leader-keys "oc" 'bm-remove-all-all-buffers)
 #+end_src
 
 ** Python
@@ -31,8 +31,13 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
     (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
     (spacemacs/set-leader-keys "or" 'org-brain-refile)
   #+end_src
-
   #+RESULTS:
+
+** Fixme Mode
+#+begin_src emacs-lisp :tangle yes
+   ;(global-fixmee-mode 1)
+  ; (spacemacs/set-leader-keys "of" 'fixmee-view-listing)
+#+end_src
 
 * Org Mode
 ** Capture
@@ -80,13 +85,10 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 ** ref
    First we configure where the files can be found.
 #+begin_src emacs-lisp :tangle yes
-  (setq org-ref-default-bibliography '("~/Dropbox/Org/brain/Bachelorarbeit/Papers/refs.bib")
-        org-ref-pdf-directory "~/Dropbox/Org/brain/Bachelorarbeit/Papers/"
-        org-ref-bibliography-notes "~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org")
+  (setq bibtex-completion-bibliography '("~/Dropbox/Org/brain/Bachelorarbeit/Papers/refs.bib")
+        bibtex-completion-library-path "~/Dropbox/Org/brain/Bachelorarbeit/Papers/"
+        bibtex-completion-notes-path "~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org")
 #+end_src
-
-#+RESULTS:
-: ~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org
 
 This sets the pdf open process to use zathura.
 #+begin_src emacs-lisp :tangle yes
@@ -218,37 +220,15 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
 #+BEGIN_SRC emacs-lisp :tangle yes
   (with-eval-after-load 'org-agenda
     (require 'org-projectile)
-    (mapcar '(lambda (file)
+    (mapcar #'(lambda (file)
                    (when (file-exists-p file)
                      (push file org-agenda-files)))
             (org-projectile-todo-files)))
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (push (org-projectile:todo-files) org-agenda-files))
 #+END_SRC
 
-* Auto Complete
-** Company
-
-#+begin_src emacs-lisp :tangle yes
-  (setq-default dotspacemacs-configuration-layers
-    '((auto-completion :variables
-                      auto-completion-enable-help-tooltip t)))
-  (setq-default dotspacemacs-configuration-layers
-                '((auto-completion :variables
-                                   auto-completion-enable-snippets-in-popup t)))
-
-  (setq-default dotspacemacs-configuration-layers '(
-    (auto-completion :variables
-                     auto-completion-return-key-behavior 'complete
-                     auto-completion-tab-key-behavior 'cycle
-                     auto-completion-complete-with-key-sequence nil
-                     auto-completion-complete-with-key-sequence-delay 0.1
-                     auto-completion-private-snippets-directory nil)
-                     ))
-#+end_src
-* Spell Check
- #+begin_src emacs-lisp
-  (setq-default dotspacemacs-configuration-layers
-    '((spell-checking :variables spell-checking-enable-auto-dictionary t)))
- #+end_src
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 
@@ -281,7 +261,7 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
 ** Transparency
    Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
 #+begin_src emacs-lisp :tangle yes
-  ;; (spacemacs/enable-transparency)
+  (spacemacs/enable-transparency)
 #+end_src
 ** Popper
 #+begin_src emacs-lisp :tangle yes
@@ -299,7 +279,8 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
   ;; (spacemacs/set-leader-keys "wpc" 'popper-cycle)
   ;; (spacemacs/set-leader-keys "wpl" 'popper-toggle-latest)
 #+end_src
-** Doom Modeline
-  #+begin_src emacs-lisp :tangle yes
-   (doom-modeline-mode 1)
-  #+end_src
+** evil-Better-jumper
+This variable prevents the C-i hotkey to behave like Tab in the gui version of emacs.
+#+begin_src emacs-lisp :tangle yes
+ (setq dotspacemacs-distinguish-gui-tab t)
+#+end_src
