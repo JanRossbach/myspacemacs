@@ -41,15 +41,16 @@ This function should only modify configuration layer settings."
      markdown
      lsp
      (clojure :variables
-              clojure-enable-sayid t
-              clojure-enable-clj-refactor t
+              clojure-enable-sayid nil
+              clojure-enable-clj-refactor nil
               clojure-enable-linters 'clj-kondo
               clojure-enable-fancify-symbols t)
      csv
      search-engine
      vinegar
      ess
-     helm
+     ;helm
+     compleseus
      (auto-completion :variables
                       auto-completion-enable-help-tooltip t
                       auto-completion-enable-snippets-in-popup t
@@ -79,6 +80,7 @@ This function should only modify configuration layer settings."
           org-projectile-file "TODOs.org"
           org-enable-reveal-js-support t
           org-enable-org-brain-support t
+          org-enable-roam-support t
           org-enable-notifications t
           org-start-notification-daemon-on-startup t
           org-agenda-files '("~/Dropbox/Org/brain"
@@ -252,7 +254,8 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(doom-city-lights
+   dotspacemacs-themes '(doom-one
+                         doom-city-lights
                          spacemacs-dark
                          spacemacs-light)
 

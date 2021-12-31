@@ -114,6 +114,15 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
   (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
 #+end_src
 
+** Roam
+
+  First, we need to define the Home directory for org roam.
+#+begin_src emacs-lisp :tangle yes
+  (setq org-roam-directory (file-truename "~/Dropbox/Org/roam/"))
+  (setq org-roam-completion-everywhere t)
+#+end_src
+
+
 ** Agenda
 *** TODO-SEQ
    Setting the keyword Sequenze for todo keywords.
