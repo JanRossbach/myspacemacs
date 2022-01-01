@@ -3,6 +3,10 @@
 #+property: header-args:elisp :tangle ~/.config/spacemacsconf/user-config.el
 #+STARTUP: overview
 
+#+begin_src emacs-lisp :tangle yes
+;; -*- lexical-binding: t; -*-
+#+end_src
+
 * Keybinds
   This section defines some custom Keybinds for sapcemacs.
 
@@ -29,7 +33,7 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
     (spacemacs/set-leader-keys "oo" 'org-brain-agenda)
     (spacemacs/set-leader-keys "oA" 'org-brain-archive)
     (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
-    (spacemacs/set-leader-keys "or" 'org-brain-refile)
+    (spacemacs/set-leader-keys "oR" 'org-brain-refile)
   #+end_src
   #+RESULTS:
 
@@ -116,12 +120,95 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
 
 ** Roam
 
-  First, we need to define the Home directory for org roam.
+Setting up the home directory for org roam and turning on completion of Nodes.
 #+begin_src emacs-lisp :tangle yes
   (setq org-roam-directory (file-truename "~/Dropbox/Org/roam/"))
   (setq org-roam-completion-everywhere t)
 #+end_src
 
+Org roam uses custom capture templates. Let's set them here. The semantics are similar to regular Org capture templates.
+
+#+begin_src emacs-lisp :tangle yes
+   (setq org-roam-capture-templates '(("d" "default" plain "%?" :target
+                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}"))
+                                       ("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+                                        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+                                        :unnarrowed t)))
+#+end_src
+
+Then we define some custom functions. Org roam is a lot easier to hack on and customize than Org Brain because it is simpler out of the box.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun org-roam-node-insert-immediate (arg &rest args)
+    (interactive "P")
+    (let ((args (cons arg args))
+          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+      (apply #'org-roam-node-insert args)))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (my/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+;; Build the agenda list the first time for the session
+(my/org-roam-refresh-agenda-list)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+  (defun my/org-roam-project-finalize-hook ()
+    "Adds the captured project file to `org-agenda-files' if the
+  capture was not aborted."
+    ;; Remove the hook since it was added temporarily
+    (remove-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+    ;; Add project file to the agenda list if the capture was confirmed
+    (unless org-note-abort
+      (with-current-buffer (org-capture-get :buffer)
+        (add-to-list 'org-agenda-files (buffer-file-name)))))
+
+  (defun my/org-roam-find-project ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+    ;; Select a project file to open, creating it if necessary
+    (org-roam-node-find
+     nil
+     nil
+     (my/org-roam-filter-by-tag "Project")
+     :templates
+     '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+        :unnarrowed t))))
+
+  (org-roam-node-tags (first (org-roam-node-list)))
+#+end_src
+
+Now we have all the functions we will need for the setup.
+Let's now set up the hotkeys in the user space under a new prefix r.
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/declare-prefix "or" "org-roam")
+  (spacemacs/set-leader-keys "ord" 'org-id-get-create)
+  (spacemacs/set-leader-keys "orf" 'org-roam-node-find)
+  (spacemacs/set-leader-keys "ori" 'org-roam-node-insert)
+  (spacemacs/set-leader-keys "ora" 'org-roam-alias-add)
+  (spacemacs/set-leader-keys "orI" 'org-roam-node-insert-immediate)
+  (spacemacs/set-leader-keys "orp" 'my/org-roam-find-project)
+  (spacemacs/set-leader-keys "ort" 'org-roam-dailies-goto-today)
+#+end_src
+
+#+RESULTS:
 
 ** Agenda
 *** TODO-SEQ
@@ -147,6 +234,15 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
 
      (spacemacs/set-leader-keys "oi" 'go-to-inbox-buffer)
    #+end_src
+*** Files
+
+Here is a Place to hard code some files we want to have in the agenda in addition to the ones added automatically.
+#+begin_src emacs-lisp :tangle yes
+  (push "~/Dropbox/Org/brain/habits.org" org-agenda-files)
+  (push "~/Dropbox/Org/brain/agenda.org" org-agenda-files)
+  (push "~/Dropbox/Org/brain/inbox.org" org-agenda-files)
+#+end_src
+
 *** Super agenda
 
     Here I set my GTD view with the help of the org-super-agenda package.
