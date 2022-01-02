@@ -27,22 +27,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'python-mode "se" 'python-shell-send-statement)
 #+end_src
 
-** Org Brain alternative keys
-  #+begin_src emacs-lisp :tangle yes
-    (with-eval-after-load 'org-brain (define-key org-brain-visualize-mode-map "i" 'link-hint-open-link))
-    (spacemacs/set-leader-keys "oo" 'org-brain-agenda)
-    (spacemacs/set-leader-keys "oA" 'org-brain-archive)
-    (spacemacs/set-leader-keys "o:" 'org-brain-set-tags)
-    (spacemacs/set-leader-keys "oR" 'org-brain-refile)
-  #+end_src
-  #+RESULTS:
-
-** Fixme Mode
-#+begin_src emacs-lisp :tangle yes
-   ;(global-fixmee-mode 1)
-  ; (spacemacs/set-leader-keys "of" 'fixmee-view-listing)
-#+end_src
-
 * Org Mode
 ** Capture
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
@@ -112,12 +96,6 @@ of pdflatex commands that are run on the file. Otherwise citations are not going
           "pdflatex -interaction nonstopmode -output-directory %o %f"))
 #+end_src
 
-** Org brain
-   This enables getting to my Org brain files from any org document.
-#+begin_src emacs-lisp :tangle yes
-  (add-hook 'before-save-hook #'org-brain-ensure-ids-in-buffer)
-#+end_src
-
 ** Roam
 
 Setting up the home directory for org roam and turning on completion of Nodes.
@@ -129,11 +107,14 @@ Setting up the home directory for org roam and turning on completion of Nodes.
 Org roam uses custom capture templates. Let's set them here. The semantics are similar to regular Org capture templates.
 
 #+begin_src emacs-lisp :tangle yes
-   (setq org-roam-capture-templates '(("d" "default" plain "%?" :target
-                                       (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}"))
-                                       ("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
-                                        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
-                                        :unnarrowed t)))
+  (setq org-roam-capture-templates '(("d" "default" plain "%?" :target
+                                      (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}"))
+                                      ("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
+                                       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+                                       :unnarrowed t)
+                                      ("e" "entry-point" plain "* Topic\n\n%?\n\n"
+                                       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: EntryPoint")
+                                       :unnarrowed t)))
 #+end_src
 
 Then we define some custom functions. Org roam is a lot easier to hack on and customize than Org Brain because it is simpler out of the box.
@@ -148,21 +129,21 @@ Then we define some custom functions. Org roam is a lot easier to hack on and cu
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(defun my/org-roam-filter-by-tag (tag-name)
-  (lambda (node)
-    (member tag-name (org-roam-node-tags node))))
+  (defun my/org-roam-filter-by-tag (tag-name)
+    (lambda (node)
+      (member tag-name (org-roam-node-tags node))))
 
-(defun my/org-roam-list-notes-by-tag (tag-name)
-  (mapcar #'org-roam-node-file
-          (seq-filter
-           (my/org-roam-filter-by-tag tag-name)
-           (org-roam-node-list))))
+  (defun my/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (my/org-roam-filter-by-tag tag-name)
+             (org-roam-node-list))))
 
-(defun my/org-roam-refresh-agenda-list ()
-  (interactive
-  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
-;; Build the agenda list the first time for the session
-(my/org-roam-refresh-agenda-list)
+  (defun my/org-roam-refresh-agenda-list ()
+    (interactive)
+    (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+  ;; Build the agenda list the first time for the session
+  (my/org-roam-refresh-agenda-list)
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -191,21 +172,72 @@ Then we define some custom functions. Org roam is a lot easier to hack on and cu
      '(("p" "project" plain "* Goals\n\n%?\n\n* Tasks\n\n** TODO Add initial tasks\n\n* Dates\n\n"
         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
         :unnarrowed t))))
-
-  (org-roam-node-tags (first (org-roam-node-list)))
 #+end_src
 
-Now we have all the functions we will need for the setup.
-Let's now set up the hotkeys in the user space under a new prefix r.
 #+begin_src emacs-lisp :tangle yes
-  (spacemacs/declare-prefix "or" "org-roam")
-  (spacemacs/set-leader-keys "ord" 'org-id-get-create)
-  (spacemacs/set-leader-keys "orf" 'org-roam-node-find)
-  (spacemacs/set-leader-keys "ori" 'org-roam-node-insert)
-  (spacemacs/set-leader-keys "ora" 'org-roam-alias-add)
-  (spacemacs/set-leader-keys "orI" 'org-roam-node-insert-immediate)
-  (spacemacs/set-leader-keys "orp" 'my/org-roam-find-project)
-  (spacemacs/set-leader-keys "ort" 'org-roam-dailies-goto-today)
+(defun my/org-roam-capture-task ()
+  (interactive)
+  ;; Add the project file to the agenda after capture is finished
+  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Capture the new task, creating the project file if necessary
+  (org-roam-capture- :node (org-roam-node-read
+                            nil
+                            (my/org-roam-filter-by-tag "Project"))
+                     :templates '(("p" "project" plain "** TODO %?"
+                                   :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                          "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+                                                          ("Tasks"))))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(defun my/org-roam-copy-todo-to-today ()
+  (interactive)
+  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+        (org-roam-dailies-capture-templates
+          '(("t" "tasks" entry "%?"
+             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+        (org-after-refile-insert-hook #'save-buffer)
+        today-file
+        pos)
+    (save-window-excursion
+      (org-roam-dailies--capture (current-time) t)
+      (setq today-file (buffer-file-name))
+      (setq pos (point)))
+
+    ;; Only refile if the target file is different than the current file
+    (unless (equal (file-truename today-file)
+                   (file-truename (buffer-file-name)))
+      (org-refile nil nil (list "Tasks" today-file nil pos)))))
+
+(add-to-list 'org-after-todo-state-change-hook
+             (lambda ()
+               (when (equal org-state "DONE")
+                 (my/org-roam-copy-todo-to-today))))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+  (defun my/org-roam-find-entry-point()
+    (interactive)
+    (org-roam-node-find
+     nil
+     nil
+     (my/org-roam-filter-by-tag "EntryPoint")
+     :templates
+     '(("e" "entry-point" plain "* Topic\n\n%?\n\n"
+       :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: EntryPoint")
+       :unnarrowed t))))
+#+end_src
+
+
+Now we have all the functions we will need for the setup.
+Let's now set up the hotkeys in the major mode to use our newly created Functions.
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "re" 'my/org-roam-find-entry-point)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "rp" 'my/org-roam-find-project)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "rI" 'org-roam-node-insert-immediate)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "rn" 'org-id-get-create)
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode "rT" 'my/org-roam-capture-task)
 #+end_src
 
 #+RESULTS:
@@ -220,7 +252,7 @@ Let's now set up the hotkeys in the user space under a new prefix r.
 *** Archive
     Set the archive Location globally to the current archive.
    #+begin_src emacs-lisp :tangle yes
-     ;;(setq org-archive-location "~/Dropbox/archive/myarchive.org")
+     (setq org-archive-location "~/Dropbox/archive/myarchive.org")
    #+end_src
 *** Inbox
     Lets first define a custom function to get to the inbox quickly from anywhere and bind it to
@@ -337,13 +369,6 @@ Here is a Place to hard code some files we want to have in the agenda in additio
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
 
-** Tabs
-  Turn on tab mode by default and set the new tab choice to the home buffer.
- #+begin_src emacs-lisp :tangle yes
-   ;; (tab-bar-mode 1)
-   ;; (setq tab-bar-new-tab-choice "*spacemacs*")
- #+end_src
-
 ** Neotree
 
 #+begin_src emacs-lisp :tangle yes
@@ -358,31 +383,10 @@ Here is a Place to hard code some files we want to have in the agenda in additio
   (openwith-mode t)
   (setq openwith-associations '(("\\.pdf\\'" "zathura" (file))))
 #+end_src
-** Emacs comp-native
-   This setting disables the constant compiler warnings in the emacs-native-comp version of emacs.
-#+begin_src emacs-lisp :tangle yes
-  ;;(setq comp-async-report-warnings-errors nil)
-#+end_src
 ** Transparency
    Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
 #+begin_src emacs-lisp :tangle yes
   (spacemacs/enable-transparency)
-#+end_src
-** Popper
-#+begin_src emacs-lisp :tangle yes
-  ;; (setq popper-reference-buffers
-  ;;      '("\\*Messages\\*"
-  ;;        "\\*Warnings\\*"
-  ;;         "Output\\*"
-  ;;         help-mode
-  ;;         messeges-mode
-  ;;         compilation-mode))
-  ;; ;(setq popper-group-function #'popper-group-by-projectile)
-  ;; (global-set-key (kbd "C-ß") 'popper-toggle-latest)
-  ;; (global-set-key (kbd "M-ß") 'popper-cycle)
-  ;; (spacemacs/set-leader-keys "wpt" 'popper-toggle-type)
-  ;; (spacemacs/set-leader-keys "wpc" 'popper-cycle)
-  ;; (spacemacs/set-leader-keys "wpl" 'popper-toggle-latest)
 #+end_src
 ** evil-Better-jumper
 This variable prevents the C-i hotkey to behave like Tab in the gui version of emacs.

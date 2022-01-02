@@ -79,14 +79,10 @@ This function should only modify configuration layer settings."
      (org :variables
           org-projectile-file "TODOs.org"
           org-enable-reveal-js-support t
-          org-enable-org-brain-support t
+          org-enable-org-brain-support nil
           org-enable-roam-support t
           org-enable-notifications t
-          org-start-notification-daemon-on-startup t
-          org-agenda-files '("~/Dropbox/Org/brain"
-                             "~/Dropbox/Org/brain/Bachelorarbeit"
-                             "~/Dropbox/Org/brain/Bachelorarbeit/Papers/notes.org")
-          )
+          org-start-notification-daemon-on-startup t)
      syntax-checking
      (shell :variables
             shell-default-height 30
