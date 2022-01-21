@@ -33,8 +33,18 @@ This function should only modify configuration layer settings."
      tabs
      yaml
      asciidoc
+     (scheme :variables
+             scheme-implementations '(guile))
      evil-better-jumper
+     nixos
      scala
+     ;; (exwm :variables exwm-enable-systray t
+     ;;       exwm-autostart-xdg-applications nil
+     ;;       exwm-terminal-command "alacritty"
+     ;;       exwm-locking-command nil
+     ;;       exwm-hide-tiling-modeline nil
+     ;;       exwm-workspace-switch-wrap t
+     ;;       exwm-randr-command "xrandr --output HDMI-0 --left-of DVI-D-0")
      haskell
      sql
      bibtex
@@ -86,8 +96,10 @@ This function should only modify configuration layer settings."
      syntax-checking
      (shell :variables
             shell-default-height 30
+            shell-default-term-shell "/bin/zsh"
+            shell-default-shell 'eshell
             shell-default-position 'bottom)
-     ;(spell-checking :variables spell-checking-enable-auto-dictionary t)
+     (spell-checking :variables spell-checking-enable-auto-dictionary t)
      version-control
      )
    ;; List of additional packages that will be installed without being
@@ -466,7 +478,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server nil
+   dotspacemacs-enable-server t
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -477,7 +489,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server t
 
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
