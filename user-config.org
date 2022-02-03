@@ -268,7 +268,7 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
     Lets first define a custom function to get to the inbox quickly from anywhere and bind it to
     a spacemacs user command.
    #+begin_src emacs-lisp :tangle yes
-     (setq gtd/inbox-file-path "~/Dropbox/Org/roam/inbox.org")
+     (setq gtd/inbox-file-path "~/Dropbox/Org/inbox.org")
 
      (defun go-to-inbox-buffer ()
        (interactive)
@@ -397,7 +397,9 @@ Here is a Place to hard code some files we want to have in the agenda in additio
    Enables/Disables transparency at startup. Use the spacemacs/toggle-transparency to change it afterwards.
 #+begin_src emacs-lisp :tangle yes
   (spacemacs/enable-transparency)
+  (add-hook 'after-make-frame-functions 'spacemacs/enable-transparency)
 #+end_src
+
 ** evil-Better-jumper
 This variable prevents the C-i hotkey to behave like Tab in the gui version of emacs.
 #+begin_src emacs-lisp :tangle yes
