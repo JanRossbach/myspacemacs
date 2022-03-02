@@ -29,15 +29,17 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(
-     tabs
+   '(graphviz
+     vimscript
+     (tabs :variables
+           tabs-highlight-current-tab 'left)
      yaml
      asciidoc
      (scheme :variables
              scheme-implementations '(guile))
      evil-better-jumper
-     nixos
      scala
+     multiple-cursors
      ;; (exwm :variables exwm-enable-systray t
      ;;       exwm-autostart-xdg-applications nil
      ;;       exwm-terminal-command "alacritty"
@@ -45,8 +47,8 @@ This function should only modify configuration layer settings."
      ;;       exwm-hide-tiling-modeline nil
      ;;       exwm-workspace-switch-wrap t
      ;;       exwm-randr-command "xrandr --output HDMI-0 --left-of DVI-D-0")
-     haskell
-     sql
+     ;;haskell
+     ;;sql
      bibtex
      markdown
      lsp
@@ -55,7 +57,7 @@ This function should only modify configuration layer settings."
               clojure-enable-clj-refactor nil
               clojure-enable-linters 'clj-kondo
               clojure-enable-fancify-symbols t)
-     csv
+     ;;csv
      search-engine
      vinegar
      ess
@@ -70,9 +72,15 @@ This function should only modify configuration layer settings."
                       auto-completion-complete-with-key-sequence-delay 0.1
                       auto-completion-private-snippets-directory nil)
      emacs-lisp
+     (treemacs
+      :variables
+      treemacs-use-follow-mode t
+      treemacs-use-filewatch-mode t
+      treemacs-use-git-mode 'simple
+      treemacs-use-collapsed-directories 3)
      bm
      dap
-     ipython-notebook
+     ;;ipython-notebook
      finance
      git
      ibuffer
@@ -108,9 +116,7 @@ This function should only modify configuration layer settings."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '(doom-themes
                                       elpher
-                                      ;anki-editor
-                                      ;button-lock
-                                      ;fixmee
+                                      langtool
                                       openwith
                                       org-super-agenda
                                       org-download
@@ -136,9 +142,13 @@ It should only modify the values of Spacemacs settings."
   ;; This setq-default sexp is an exhaustive list of all the supported
   ;; spacemacs settings.
   (setq-default
-   ;; If non-nil then enable support for the portable dumper. You'll need
-   ;; to compile Emacs 27 from source following the instructions in file
+   ;; If non-nil then enable support for the portable dumper. You'll need to
+   ;; compile Emacs 27 from source following the instructions in file
    ;; EXPERIMENTAL.org at to root of the git repository.
+   ;;
+   ;; WARNING: pdumper does not work with Native Compilation, so it's disabled
+   ;; regardless of the following setting when native compilation is in effect.
+   ;;
    ;; (default nil)
    dotspacemacs-enable-emacs-pdumper nil
 
@@ -162,7 +172,9 @@ It should only modify the values of Spacemacs settings."
    ;; `--insecure' which forces the value of this variable to nil.
    ;; (default t)
    dotspacemacs-elpa-https t
+
    ;; Maximum allowed time in seconds to contact an ELPA repository.
+   ;; (default 5)
    dotspacemacs-elpa-timeout 5
 
    ;; Set `gc-cons-threshold' and `gc-cons-percentage' when startup finishes.
@@ -219,18 +231,22 @@ It should only modify the values of Spacemacs settings."
    ;; directory. A string value must be a path to an image format supported
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
-   dotspacemacs-startup-banner 'random
+   dotspacemacs-startup-banner 'official
+
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
    ;; Possible values for list-type are:
    ;; `recents' `recents-by-project' `bookmarks' `projects' `agenda' `todos'.
    ;; List sizes may be nil, in which case
    ;; `spacemacs-buffer-startup-lists-length' takes effect.
-   dotspacemacs-startup-lists '((bookmarks . 4)
-                                (recents . 5)
-                                (projects . 7)
-                                (agenda . 5))
-   ;; True if the home buffer should respond to resize events.
+   ;; The exceptional case is `recents-by-project', where list-type must be a
+   ;; pair of numbers, e.g. `(recents-by-project . (7 .  5))', where the first
+   ;; number is the project limit and the second the limit on the recent files
+   ;; within a project.
+   dotspacemacs-startup-lists '((recents . 5)
+                                (projects . 7))
+
+   ;; True if the home buffer should respond to resize events. (default t)
    dotspacemacs-startup-buffer-responsive t
 
    ;; Show numbers before the startup list lines. (default t)
@@ -238,6 +254,11 @@ It should only modify the values of Spacemacs settings."
 
    ;; The minimum delay in seconds between number key presses. (default 0.4)
    dotspacemacs-startup-buffer-multi-digit-delay 0.4
+
+   ;; If non-nil, show file icons for entries and headings on Spacemacs home buffer.
+   ;; This has no effect in terminal or if "all-the-icons" package or the font
+   ;; is not installed. (default nil)
+   dotspacemacs-startup-buffer-show-icons t
 
    ;; Default major mode for a new empty buffer. Possible values are mode
    ;; names such as `text-mode'; and `nil' to use Fundamental mode.
@@ -290,9 +311,9 @@ It should only modify the values of Spacemacs settings."
    dotspacemacs-default-font '("Mononoki Nerd Font"
                                :size 12.0
                                :weight normal
-                               :width normal
-                               :powerline-scale 1.1)
-   ;; The leader key
+                               :width normal)
+
+   ;; The leader key (default "SPC")
    dotspacemacs-leader-key "SPC"
 
    ;; The key used for Emacs commands `M-x' (after pressing on the leader key).
@@ -478,7 +499,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, start an Emacs server if one is not already running.
    ;; (default nil)
-   dotspacemacs-enable-server t
+   dotspacemacs-enable-server nil
 
    ;; Set the emacs server socket location.
    ;; If nil, uses whatever the Emacs default is, otherwise a directory path
@@ -489,7 +510,7 @@ It should only modify the values of Spacemacs settings."
 
    ;; If non-nil, advise quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server t
+   dotspacemacs-persistent-server nil
 
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `rg', `ag', `pt', `ack' and `grep'.
@@ -594,3 +615,50 @@ dump.")
   (let ((uc (concat dotspacemacs-directory "user-config.el")))
     (message (concat "ds-d" dotspacemacs-directory))
     (load-file uc)))
+
+;; Do not write anything past this comment. This is where Emacs will
+;; auto-generate custom variable definitions.
+(defun dotspacemacs/emacs-custom-settings ()
+  "Emacs custom settings.
+This is an auto-generated function, do not modify its content directly, use
+Emacs customize menu instead.
+This function is called at the very end of Spacemacs initialization."
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(evil-want-Y-yank-to-eol nil)
+ '(hl-todo-keyword-faces
+   '(("TODO" . "#dc752f")
+     ("NEXT" . "#dc752f")
+     ("THEM" . "#2d9574")
+     ("PROG" . "#4f97d7")
+     ("OKAY" . "#4f97d7")
+     ("DONT" . "#f2241f")
+     ("FAIL" . "#f2241f")
+     ("DONE" . "#86dc2f")
+     ("NOTE" . "#b1951d")
+     ("KLUDGE" . "#b1951d")
+     ("HACK" . "#b1951d")
+     ("TEMP" . "#b1951d")
+     ("FIXME" . "#dc752f")
+     ("XXX+" . "#dc752f")
+     ("\\?\\?\\?+" . "#dc752f")))
+ '(org-agenda-files
+   '("/home/jan/School/Bachelorarbeit/fset/TODOs.org" "/home/jan/Dropbox/Org/inbox.org" "/home/jan/Dropbox/Org/roam/20220130090902-sks.org" "/home/jan/Dropbox/Org/roam/20220101151120-bachelorarbeit.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org"))
+ '(org-fontify-done-headline nil)
+ '(org-fontify-todo-headline nil)
+ '(package-selected-packages
+   '(evil-mc graphviz-dot-mode vimrc-mode helm-gtags helm helm-core ggtags dactyl-mode counsel-gtags counsel swiper ivy dirvish ranger geiser-guile geiser nix-mode company-nixos-options nixos-options evil-exwm-state desktop-environment exwm flyspell-correct-popup flyspell-correct auto-dictionary org-roam wgrep vertico-repeat vertico-quick vertico-directory vertico orderless marginalia embark-consult embark consult-yasnippet consult yatemplate yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-edit sql-indent sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sbt-mode sayid sass-mode ron-mode restart-emacs rainbow-delimiters racer quickrun pytest pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-wild-notifier org-superstar org-super-agenda org-rich-yank org-ref org-re-reveal org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink org-brain openwith open-junk-file nose nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-metals lsp-java lsp-haskell lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-bibtex helm-ag haskell-snippets hackernews groovy-mode groovy-imports grip-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy font-lock+ flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-ledger flycheck-haskell flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-ledger evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu ess-R-data-view eshell-z eshell-prompt-extras esh-help engine-mode emr emmet-mode elpher elisp-slime-nav ein editorconfig ediprolog dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline disaster dired-quick-sort diminish define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-rtags company-quickhelp company-cabal company-c-headers company-anaconda column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode centaur-tabs ccls cargo browse-at-remote bm blacken better-jumper auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
+ '(safe-local-variable-values
+   '((cider-clojure-cli-global-options . "-A:dev:test")
+     (cider-clojure-cli-aliases . "-A:dev:test")))
+ '(terminal-here-linux-terminal-command 'alacritty))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(highlight-parentheses-highlight ((nil (:weight ultra-bold))) t))
+)
