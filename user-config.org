@@ -104,7 +104,6 @@ Setting up the home directory for org roam and turning on completion of Nodes.
   (setq org-roam-completion-everywhere t)
 #+end_src
 
-
 Org roam uses custom capture templates. Let's set them here. The semantics are similar to regular Org capture templates.
 
 #+begin_src emacs-lisp :tangle yes
@@ -149,6 +148,7 @@ Then we define some custom functions. Org roam is a lot easier to hack on and cu
   (my/org-roam-refresh-agenda-list)
 #+end_src
 
+
 #+begin_src emacs-lisp :tangle yes
   (defun my/org-roam-project-finalize-hook ()
     "Adds the captured project file to `org-agenda-files' if the
@@ -178,45 +178,19 @@ Then we define some custom functions. Org roam is a lot easier to hack on and cu
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(defun my/org-roam-capture-task ()
-  (interactive)
-  ;; Add the project file to the agenda after capture is finished
-  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+  (defun my/org-roam-capture-task ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
 
-  ;; Capture the new task, creating the project file if necessary
-  (org-roam-capture- :node (org-roam-node-read
-                            nil
-                            (my/org-roam-filter-by-tag "Project"))
-                     :templates '(("p" "project" plain "** TODO %?"
-                                   :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
-                                                          "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
-                                                          ("Tasks"))))))
-#+end_src
-
-#+begin_src emacs-lisp :tangle yes
-(defun my/org-roam-copy-todo-to-today ()
-  (interactive)
-  (let ((org-refile-keep t) ;; Set this to nil to delete the original!
-        (org-roam-dailies-capture-templates
-          '(("t" "tasks" entry "%?"
-             :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
-        (org-after-refile-insert-hook #'save-buffer)
-        today-file
-        pos)
-    (save-window-excursion
-      (org-roam-dailies--capture (current-time) t)
-      (setq today-file (buffer-file-name))
-      (setq pos (point)))
-
-    ;; Only refile if the target file is different than the current file
-    (unless (equal (file-truename today-file)
-                   (file-truename (buffer-file-name)))
-      (org-refile nil nil (list "Tasks" today-file nil pos)))))
-
-(add-to-list 'org-after-todo-state-change-hook
-             (lambda ()
-               (when (equal org-state "DONE")
-                 (my/org-roam-copy-todo-to-today))))
+    ;; Capture the new task, creating the project file if necessary
+    (org-roam-capture- :node (org-roam-node-read
+                              nil
+                              (my/org-roam-filter-by-tag "Project"))
+                       :templates '(("p" "project" plain "** TODO %?"
+                                     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                            "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+                                                            ("Tasks"))))))
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
@@ -260,6 +234,11 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
   (setq org-todo-keywords
         '((sequence "TODO(t)" "NEXT(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
 #+end_src
+*** Drawer
+#+begin_src emacs-lisp :tangle yes
+(setq org-log-into-drawer t)
+#+end_src
+
 *** Archive
     Set the archive Location globally to the current archive.
    #+begin_src emacs-lisp :tangle yes

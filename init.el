@@ -92,7 +92,6 @@ This function should only modify configuration layer settings."
      html
      sql
      hackernews
-     github
      (c-c++ variables: c-c++-enable-clang-support t)
      (org :variables
           org-projectile-file "TODOs.org"
@@ -646,7 +645,7 @@ This function is called at the very end of Spacemacs initialization."
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
  '(org-agenda-files
-   '("/home/jan/School/Bachelorarbeit/fset/TODOs.org" "/home/jan/Dropbox/Org/inbox.org" "/home/jan/Dropbox/Org/roam/20220130090902-sks.org" "/home/jan/Dropbox/Org/roam/20220101151120-bachelorarbeit.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org"))
+   '("/home/jan/Dropbox/Org/inbox.org" "/home/jan/Dropbox/Org/roam/20220130090902-sks.org" "/home/jan/Dropbox/Org/roam/20220101151120-bachelorarbeit.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org"))
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
  '(package-selected-packages
