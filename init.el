@@ -35,10 +35,11 @@ This function should only modify configuration layer settings."
            tabs-highlight-current-tab 'left)
      yaml
      asciidoc
-     (scheme :variables
-             scheme-implementations '(guile))
+     elixir
+     ;; (scheme :variables
+     ;;         scheme-implementations '(guile))
      evil-better-jumper
-     scala
+     ;;scala
      multiple-cursors
      ;; (exwm :variables exwm-enable-systray t
      ;;       exwm-autostart-xdg-applications nil
@@ -85,13 +86,13 @@ This function should only modify configuration layer settings."
      git
      ibuffer
      python
-     rust
+     ;rust
      prolog
      java
      templates
      html
      sql
-     hackernews
+     ;hackernews
      (c-c++ variables: c-c++-enable-clang-support t)
      (org :variables
           org-projectile-file "TODOs.org"
@@ -102,9 +103,9 @@ This function should only modify configuration layer settings."
           org-start-notification-daemon-on-startup t)
      syntax-checking
      (shell :variables
-            shell-default-height 30
+            shell-default-height 40
             shell-default-term-shell "/bin/zsh"
-            shell-default-shell 'eshell
+            shell-default-shell 'vterm
             shell-default-position 'bottom)
      (spell-checking :variables spell-checking-enable-auto-dictionary t)
      version-control
@@ -645,11 +646,15 @@ This function is called at the very end of Spacemacs initialization."
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
  '(org-agenda-files
-   '("/home/jan/Dropbox/Org/inbox.org" "/home/jan/Dropbox/Org/roam/20220130090902-sks.org" "/home/jan/Dropbox/Org/roam/20220101151120-bachelorarbeit.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org"))
+   '("/home/jan/Dropbox/Org/roam/pages/Async.org" "/home/jan/Dropbox/Org/roam/pages/Backen.org" "/home/jan/Dropbox/Org/roam/pages/Elixir.org" "/home/jan/Dropbox/Org/roam/pages/Kochen.org" "/home/jan/Dropbox/Org/roam/pages/Vorlesung KDD.org" "/home/jan/Dropbox/Org/roam/journals/2021-12-31.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-01.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-02.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-21.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-22.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-23.org" "/home/jan/Dropbox/Org/roam/journals/2022-01-24.org" "/home/jan/Dropbox/Org/roam/journals/2022-02-03.org" "/home/jan/Dropbox/Org/roam/journals/2022-02-09.org" "/home/jan/Dropbox/Org/roam/journals/2022-02-23.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-04.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-09.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-20.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-21.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-22.org" "/home/jan/Dropbox/Org/roam/journals/2022-04-27.org" "/home/jan/Dropbox/Org/roam/journals/2022-05-06.org" "/home/jan/Dropbox/Org/roam/journals/2022-05-07.org" "/home/jan/Dropbox/Org/roam/inbox.org" "/home/jan/Dropbox/Org/roam/20220130090902-sks.org" "/home/jan/Dropbox/Org/roam/20220322105757-projektarbeit.org" "/home/jan/Dropbox/Org/roam/20220101151120-bachelorarbeit.org" "/home/jan/Dropbox/Org/roam/20220506092637-whk.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org" "/home/jan/Dropbox/Org/roam/20220326125908-sose2022.org" "/home/jan/Dropbox/Org/roam/20220113213308-lightbot.org"))
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
+ '(org-re-reveal-revealjs-version "3.8")
+ '(org-roam-dailies-directory "journals/")
+ '(org-todo-keywords
+   '((sequence "TODO(t)" "DOING(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
  '(package-selected-packages
-   '(evil-mc graphviz-dot-mode vimrc-mode helm-gtags helm helm-core ggtags dactyl-mode counsel-gtags counsel swiper ivy dirvish ranger geiser-guile geiser nix-mode company-nixos-options nixos-options evil-exwm-state desktop-environment exwm flyspell-correct-popup flyspell-correct auto-dictionary org-roam wgrep vertico-repeat vertico-quick vertico-directory vertico orderless marginalia embark-consult embark consult-yasnippet consult yatemplate yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-edit sql-indent sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sbt-mode sayid sass-mode ron-mode restart-emacs rainbow-delimiters racer quickrun pytest pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-wild-notifier org-superstar org-super-agenda org-rich-yank org-ref org-re-reveal org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink org-brain openwith open-junk-file nose nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-metals lsp-java lsp-haskell lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-bibtex helm-ag haskell-snippets hackernews groovy-mode groovy-imports grip-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy font-lock+ flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-ledger flycheck-haskell flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-ledger evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu ess-R-data-view eshell-z eshell-prompt-extras esh-help engine-mode emr emmet-mode elpher elisp-slime-nav ein editorconfig ediprolog dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline disaster dired-quick-sort diminish define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-rtags company-quickhelp company-cabal company-c-headers company-anaconda column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode centaur-tabs ccls cargo browse-at-remote bm blacken better-jumper auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
+   '(ob-elixir flycheck-credo alchemist elixir-mode evil-mc graphviz-dot-mode vimrc-mode helm-gtags helm helm-core ggtags dactyl-mode counsel-gtags counsel swiper ivy dirvish ranger geiser-guile geiser nix-mode company-nixos-options nixos-options evil-exwm-state desktop-environment exwm flyspell-correct-popup flyspell-correct auto-dictionary org-roam wgrep vertico-repeat vertico-quick vertico-directory vertico orderless marginalia embark-consult embark consult-yasnippet consult yatemplate yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-edit sql-indent sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sbt-mode sayid sass-mode ron-mode restart-emacs rainbow-delimiters racer quickrun pytest pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-wild-notifier org-superstar org-super-agenda org-rich-yank org-ref org-re-reveal org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink org-brain openwith open-junk-file nose nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-metals lsp-java lsp-haskell lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-bibtex helm-ag haskell-snippets hackernews groovy-mode groovy-imports grip-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy font-lock+ flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-ledger flycheck-haskell flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-ledger evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu ess-R-data-view eshell-z eshell-prompt-extras esh-help engine-mode emr emmet-mode elpher elisp-slime-nav ein editorconfig ediprolog dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline disaster dired-quick-sort diminish define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-rtags company-quickhelp company-cabal company-c-headers company-anaconda column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode centaur-tabs ccls cargo browse-at-remote bm blacken better-jumper auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
  '(safe-local-variable-values
    '((cider-clojure-cli-global-options . "-A:dev:test")
      (cider-clojure-cli-aliases . "-A:dev:test")))
