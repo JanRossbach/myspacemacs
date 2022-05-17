@@ -223,9 +223,8 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "rI" 'org-roam-node-insert-immediate)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "rn" 'org-id-get-create)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "rT" 'my/org-roam-capture-task)
+  (spacemacs/set-leader-keys "ot" 'org-roam-dailies-goto-today)
 #+end_src
-
-#+RESULTS:
 
 ** Agenda
 *** TODO-SEQ
@@ -401,4 +400,28 @@ This variable prevents the C-i hotkey to behave like Tab in the gui version of e
 ** Pomodoro
 #+begin_src emacs-lisp :tangle yes
   (setq org-pomodoro-manual-break t)
+#+end_src
+
+#+begin_src elisp :tangle yes
+ ;; (setq org-export-latex-listings 'minted)
+ ;; (setq org-export-latex-custom-lang-environments
+ ;;       '(
+ ;;         (emacs-lisp "common-lispcode")
+ ;;         ))
+ ;; (setq org-export-latex-minted-options
+ ;;       '(("frame" "lines")
+ ;;         ("fontsize" "\\scriptsize")
+ ;;         ("linenos" "")))
+ ;; (setq org-latex-to-pdf-process
+ ;;   '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+ ;;     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+ ;;     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setq org-latex-listings 'minted
+      org-latex-packages-alist '(("" "minted"))
+      org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
 #+end_src
