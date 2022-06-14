@@ -29,7 +29,8 @@ This function should only modify configuration layer settings."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load.
    dotspacemacs-configuration-layers
-   '(graphviz
+   '(javascript
+     graphviz
      vimscript
      (tabs :variables
            tabs-highlight-current-tab 'left)
@@ -83,10 +84,11 @@ This function should only modify configuration layer settings."
      bm
      dap
      ;;ipython-notebook
-     finance
+     ;;finance
      git
      ibuffer
      python
+     nixos
      ;rust
      prolog
      java
@@ -100,8 +102,8 @@ This function should only modify configuration layer settings."
           org-enable-reveal-js-support t
           org-enable-org-brain-support nil
           org-enable-roam-support t
-          org-enable-notifications t
-          org-start-notification-daemon-on-startup t)
+          org-enable-roam-ui t
+          )
      syntax-checking
      (shell :variables
             shell-default-height 40
@@ -118,6 +120,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(doom-themes
                                       elpher
                                       langtool
+                                      org-drill
                                       openwith
                                       org-super-agenda
                                       org-download
@@ -233,6 +236,13 @@ It should only modify the values of Spacemacs settings."
    ;; by your Emacs build.
    ;; If the value is nil then no banner is displayed. (default 'official)
    dotspacemacs-startup-banner 'official
+
+   ;; Scale factor controls the scaling (size) of the startup banner. Default
+   ;; value is `auto' for scaling the logo automatically to fit all buffer
+   ;; contents, to a maximum of the full image height and a minimum of 3 line
+   ;; heights. If set to a number (int or float) it is used as a constant
+   ;; scaling factor for the default logo size.
+   dotspacemacs-startup-banner-scale 'auto
 
    ;; List of items to show in startup buffer or an association list of
    ;; the form `(list-type . list-size)`. If nil then it is disabled.
@@ -646,8 +656,6 @@ This function is called at the very end of Spacemacs initialization."
      ("FIXME" . "#dc752f")
      ("XXX+" . "#dc752f")
      ("\\?\\?\\?+" . "#dc752f")))
- '(org-agenda-files
-   '("/home/jan/Dropbox/Org/roam/journals" "/home/jan/Dropbox/Org/roam/pages"))
  '(org-fontify-done-headline nil)
  '(org-fontify-todo-headline nil)
  '(org-re-reveal-revealjs-version "3.8")
@@ -655,9 +663,11 @@ This function is called at the very end of Spacemacs initialization."
  '(org-todo-keywords
    '((sequence "TODO(t)" "DOING(n)" "WAITING(w@)" "|" "DONE(d!)" "CANCELLED(c@)" "DEFERRED(f@)")))
  '(package-selected-packages
-   '(pdf-view-restore pdf-tools tablist ob-elixir flycheck-credo alchemist elixir-mode evil-mc graphviz-dot-mode vimrc-mode helm-gtags helm helm-core ggtags dactyl-mode counsel-gtags counsel swiper ivy dirvish ranger geiser-guile geiser nix-mode company-nixos-options nixos-options evil-exwm-state desktop-environment exwm flyspell-correct-popup flyspell-correct auto-dictionary org-roam wgrep vertico-repeat vertico-quick vertico-directory vertico orderless marginalia embark-consult embark consult-yasnippet consult yatemplate yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-edit sql-indent sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sbt-mode sayid sass-mode ron-mode restart-emacs rainbow-delimiters racer quickrun pytest pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-wild-notifier org-superstar org-super-agenda org-rich-yank org-ref org-re-reveal org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink org-brain openwith open-junk-file nose nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-metals lsp-java lsp-haskell lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-bibtex helm-ag haskell-snippets hackernews groovy-mode groovy-imports grip-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy font-lock+ flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-ledger flycheck-haskell flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-ledger evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu ess-R-data-view eshell-z eshell-prompt-extras esh-help engine-mode emr emmet-mode elpher elisp-slime-nav ein editorconfig ediprolog dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline disaster dired-quick-sort diminish define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-rtags company-quickhelp company-cabal company-c-headers company-anaconda column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode centaur-tabs ccls cargo browse-at-remote bm blacken better-jumper auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
+   '(org-roam-ui websocket org-bookmark-heading org-drill persist tern npm-mode nodejs-repl livid-mode skewer-mode js2-refactor multiple-cursors js2-mode js-doc import-js grizzl add-node-modules-path pdf-view-restore pdf-tools tablist ob-elixir flycheck-credo alchemist elixir-mode evil-mc graphviz-dot-mode vimrc-mode helm-gtags helm helm-core ggtags dactyl-mode counsel-gtags counsel swiper ivy dirvish ranger geiser-guile geiser nix-mode company-nixos-options nixos-options evil-exwm-state desktop-environment exwm flyspell-correct-popup flyspell-correct auto-dictionary org-roam wgrep vertico-repeat vertico-quick vertico-directory vertico orderless marginalia embark-consult embark consult-yasnippet consult yatemplate yasnippet-snippets yapfify yaml-mode xterm-color ws-butler writeroom-mode winum which-key web-mode web-beautify vterm volatile-highlights vi-tilde-fringe uuidgen use-package undo-tree treemacs-projectile treemacs-persp treemacs-magit treemacs-icons-dired treemacs-evil toml-mode toc-org terminal-here tagedit symon symbol-overlay string-edit sql-indent sphinx-doc spaceline-all-the-icons smeargle slim-mode shell-pop scss-mode sbt-mode sayid sass-mode ron-mode restart-emacs rainbow-delimiters racer quickrun pytest pyenv-mode pydoc py-isort pug-mode prettier-js popwin poetry pippel pipenv pip-requirements pcre2el password-generator paradox overseer orgit-forge org-org-superstar org-super-agenda org-rich-yank org-ref org-re-reveal org-projectile org-present org-pomodoro org-mime org-download org-contrib org-cliplink org-brain openwith open-junk-file nose nameless mvn multi-term multi-line mmm-mode maven-test-mode markdown-toc macrostep lsp-ui lsp-python-ms lsp-pyright lsp-origami lsp-metals lsp-java lsp-haskell lorem-ipsum live-py-mode link-hint inspector info+ indent-guide importmagic impatient-mode ibuffer-projectile hybrid-mode hungry-delete hlint-refactor hl-todo hindent highlight-parentheses highlight-numbers highlight-indentation helm-xref helm-themes helm-swoop helm-rtags helm-pydoc helm-purpose helm-projectile helm-org-rifle helm-org helm-mode-manager helm-make helm-lsp helm-ls-git helm-hoogle helm-git-grep helm-flx helm-descbinds helm-css-scss helm-company helm-cider helm-c-yasnippet helm-bibtex helm-ag haskell-snippets hackernews groovy-mode groovy-imports grip-mode google-translate google-c-style golden-ratio gnuplot gitignore-templates github-search github-clone git-timemachine git-modes git-messenger git-link git-gutter-fringe gh-md gendoxy fuzzy font-lock+ flycheck-ycmd flycheck-rust flycheck-rtags flycheck-pos-tip flycheck-package flycheck-ledger flycheck-haskell flycheck-elsa flycheck-clj-kondo flx-ido fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-textobj-line evil-surround evil-org evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-ledger evil-indent-plus evil-iedit-state evil-goggles evil-exchange evil-escape evil-ediff evil-easymotion evil-collection evil-cleverparens evil-args evil-anzu ess-R-data-view eshell-z eshell-prompt-extras esh-help engine-mode emr emmet-mode elpher elisp-slime-nav ein editorconfig ediprolog dumb-jump drag-stuff dotenv-mode doom-themes doom-modeline disaster dired-quick-sort diminish define-word dante cython-mode csv-mode cpp-auto-include company-ycmd company-web company-rtags company-quickhelp company-cabal company-c-headers company-anaconda column-enforce-mode cmm-mode clojure-snippets clj-refactor clean-aindent-mode cider-eval-sexp-fu centered-cursor-mode centaur-tabs ccls cargo browse-at-remote bm blacken better-jumper auto-yasnippet auto-highlight-symbol auto-compile attrap aggressive-indent adoc-mode ace-link ace-jump-helm-line ac-ispell))
  '(safe-local-variable-values
-   '((cider-clojure-cli-global-options . "-A:dev:test")
+   '((cider-shadow-cljs-default-options . "app")
+     (cider-default-cljs-repl . shadow)
+     (cider-clojure-cli-global-options . "-A:dev:test")
      (cider-clojure-cli-aliases . "-A:dev:test")))
  '(terminal-here-linux-terminal-command 'alacritty))
 (custom-set-faces

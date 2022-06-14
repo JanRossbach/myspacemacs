@@ -224,6 +224,8 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "rn" 'org-id-get-create)
   (spacemacs/set-leader-keys-for-major-mode 'org-mode "rT" 'my/org-roam-capture-task)
   (spacemacs/set-leader-keys "ot" 'org-roam-dailies-goto-today)
+  (spacemacs/set-leader-keys "oT" 'org-roam-dailies-goto-tomorrow)
+  (spacemacs/set-leader-keys "of" 'org-roam-node-find)
 #+end_src
 
 ** Agenda
@@ -260,9 +262,7 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
 
 Here is a Place to hard code some files we want to have in the agenda in addition to the ones added automatically.
 #+begin_src emacs-lisp :tangle yes
-    ;(push "~/Dropbox/Org/roam/" org-agenda-files)
-    (setq org-agenda-files '("/home/jan/Dropbox/Org/roam/journals"
-                             "/home/jan/Dropbox/Org/roam/pages"))
+    (setq org-agenda-files '("/home/jan/Dropbox/Org/roam/"))
 #+end_src
 
 *** Super agenda
@@ -355,6 +355,20 @@ Here is a Place to hard code some files we want to have in the agenda in additio
   ;;   (require 'org-projectile)
   ;;   (push (org-projectile:todo-files) org-agenda-files))
 #+END_SRC
+
+** Drill
+
+#+begin_src emacs-lisp :tangle yes
+  (spacemacs/set-leader-keys "od" 'org-drill)
+  (setq org-drill-scope 'agenda)
+#+end_src
+
+** Clock
+
+#+begin_src emacs-lisp :tangle yes
+  (setq org-clock-in-switch-to-state "DOING")
+  (setq org-clock-in-switch-to-state "TODO")
+#+end_src
 
 * Misc
   In this section, there are various little adjustments to same packages that do not warrent a specific section.
