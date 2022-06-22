@@ -262,7 +262,11 @@ Let's now set up the hotkeys in the major mode to use our newly created Function
 
 Here is a Place to hard code some files we want to have in the agenda in addition to the ones added automatically.
 #+begin_src emacs-lisp :tangle yes
-    (setq org-agenda-files '("/home/jan/Dropbox/Org/roam/"))
+  ;; (setq org-agenda-files '("/home/jan/Dropbox/Org/roam/"
+  ;;                          "/home/jan/Dropbox/Org/journals/"))
+  (setq org-agenda-files nil) ;; Reset the agenda files to override local variables if present
+  (push "/home/jan/Dropbox/Org/roam/" org-agenda-files)
+  (push "/home/jan/Dropbox/Org/roam/journals/" org-agenda-files)
 #+end_src
 
 *** Super agenda
@@ -345,12 +349,12 @@ Here is a Place to hard code some files we want to have in the agenda in additio
    Projectile has some functionality to capture todos for the current project in an Org file. It is stored by default in a file called TODOS.org in the project root.
    This Code here is to add these files to the Org Agenda.
 #+BEGIN_SRC emacs-lisp :tangle yes
-  (with-eval-after-load 'org-agenda
-    (require 'org-projectile)
-    (mapcar #'(lambda (file)
-                   (when (file-exists-p file)
-                     (push file org-agenda-files)))
-            (org-projectile-todo-files)))
+  ;; (with-eval-after-load 'org-agenda
+  ;;   (require 'org-projectile)
+  ;;   (mapcar #'(lambda (file)
+  ;;                  (when (file-exists-p file)
+  ;;                    (push file org-agenda-files)))
+  ;;           (org-projectile-todo-files)))
   ;; (with-eval-after-load 'org-agenda
   ;;   (require 'org-projectile)
   ;;   (push (org-projectile:todo-files) org-agenda-files))
@@ -361,13 +365,15 @@ Here is a Place to hard code some files we want to have in the agenda in additio
 #+begin_src emacs-lisp :tangle yes
   (spacemacs/set-leader-keys "od" 'org-drill)
   (setq org-drill-scope 'agenda)
+  (setq org-drill-question-tag "card")
 #+end_src
 
 ** Clock
 
 #+begin_src emacs-lisp :tangle yes
   (setq org-clock-in-switch-to-state "DOING")
-  (setq org-clock-in-switch-to-state "TODO")
+  (setq org-clock-out-switch-to-state "TODO")
+  (setq org-clock-out-remove-zero-time-clocks t)
 #+end_src
 
 * Misc
