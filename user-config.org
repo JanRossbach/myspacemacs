@@ -27,6 +27,15 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
   (spacemacs/set-leader-keys-for-major-mode 'python-mode "se" 'python-shell-send-statement)
 #+end_src
 
+** Org
+#+begin_src emacs-lisp :tangle yes
+  (defun my-org-agenda-call () (interactive) (org-agenda nil "o"))
+  (spacemacs/set-leader-keys "oa" 'my-org-agenda-call)
+#+end_src
+
+#+RESULTS:
+
+
 * Org Mode
 ** Capture
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
