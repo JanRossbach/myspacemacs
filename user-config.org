@@ -35,7 +35,6 @@ This sets the SPC RET Binding to my Bookmarks similar to the Doom Emacs binding.
 
 #+RESULTS:
 
-
 * Org Mode
 ** Capture
    This defines the [[https://orgmode.org/manual/Capture-templates.html#Capture-templates][Capture Templates]] for my config. Some are in hardcoded files, so be careful.
@@ -373,7 +372,9 @@ Here is a Place to hard code some files we want to have in the agenda in additio
 
 #+begin_src emacs-lisp :tangle yes
   (spacemacs/set-leader-keys "od" 'org-drill)
+  (spacemacs/set-leader-keys "or" 'org-drill-resume)
   (setq org-drill-scope 'agenda)
+  ;;(setq org-drill-scope 'file)
   (setq org-drill-question-tag "card")
 #+end_src
 
@@ -393,6 +394,11 @@ Here is a Place to hard code some files we want to have in the agenda in additio
 #+begin_src emacs-lisp :tangle yes
   (setq neo-theme 'icons)
   (setq neo-window-position 'right)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(setf (lsp-session-folders-blacklist (lsp-session)) nil)
+(lsp--persist-session (lsp-session))
 #+end_src
 
 ** Openwith
